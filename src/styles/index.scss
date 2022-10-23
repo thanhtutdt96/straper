@@ -1,3 +1,17 @@
+@import 'antd/dist/antd.min.css';
+@import 'antd-css-utilities/utility.min.css';
+
+@import "variable";
+@import "typo";
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 14px;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',

@@ -10,6 +10,7 @@ module.exports = {
     "plugin:@typescript-eslint/recommended",
     "plugin:import/typescript",
     "plugin:react/jsx-runtime",
+    "plugin:styled-components-a11y/recommended",
     "plugin:prettier/recommended",
     "prettier"
   ],
@@ -24,7 +25,7 @@ module.exports = {
     tsconfigRootDir: __dirname,
     parser: "@typescript-eslint/parser",
   },
-  plugins: ["react", "@typescript-eslint", "import", "jsx-a11y", "react-hooks", "prettier"],
+  plugins: ["react", "@typescript-eslint", "import", "jsx-a11y", "react-hooks", "prettier", "styled-components-a11y"],
   rules: {
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/no-non-null-assertion": "off",
@@ -45,7 +46,8 @@ module.exports = {
       {
         endOfLine: "auto",
         singleQuote: true,
-        jsxSingleQuote: false
+        jsxSingleQuote: false,
+        bracketSameLine: false,
       }
     ],
 
@@ -66,14 +68,20 @@ module.exports = {
           group: "builtin",
           position: "before"
         },
-        // Modules
+        // Assets
         {
           pattern: "assets/**",
           group: "external",
         },
-        // Modules
+        // Contexts
         {
-          pattern: "redux/**",
+          pattern: "contexts/**",
+          group: "external",
+          position: "before"
+        },
+        // Helpers
+        {
+          pattern: "helpers/**",
           group: "external",
           position: "before"
         },
