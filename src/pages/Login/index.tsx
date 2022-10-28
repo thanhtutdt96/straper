@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { auth } from 'helpers/firebase';
+import { addDocument } from 'helpers/services';
 import {
   FacebookFilled,
   GoogleOutlined,
@@ -7,8 +8,13 @@ import {
   UserOutlined,
   WarningOutlined,
 } from '@ant-design/icons';
-import { FacebookAuthProvider, GoogleAuthProvider, signInWithPopup } from '@firebase/auth';
-import { Button, Checkbox, Form, Spin } from 'antd';
+import {
+  FacebookAuthProvider,
+  getAdditionalUserInfo,
+  GoogleAuthProvider,
+  signInWithPopup,
+} from '@firebase/auth';
+import { Button, Checkbox, Form, Spin, Typography } from 'antd';
 import logo from 'assets/logo.png';
 import {
   FormInput,
@@ -25,8 +31,24 @@ const Login = () => {
 
   const logInWithFacebook = () => {
     signInWithPopup(auth, new FacebookAuthProvider())
-      .then(({ user }) => {
+      .then((result) => {
+        const user = result.user;
+
         setSuccessMessage(`Welcome to Straper, ${user.displayName}`);
+
+        const additionalUserInfo = getAdditionalUserInfo(result);
+
+        const { displayName, email, photoURL, uid, providerId } = user;
+
+        if (additionalUserInfo?.isNewUser) {
+          void addDocument('users', {
+            displayName,
+            email,
+            photoURL,
+            uid,
+            providerId,
+          });
+        }
       })
       .catch((error) => {
         setErrorMessage(error.message);
@@ -35,8 +57,8 @@ const Login = () => {
 
   const loginWithGoogle = () => {
     signInWithPopup(auth, new GoogleAuthProvider())
-      .then(({ user }) => {
-        setSuccessMessage(`Welcome to Straper, ${user.displayName}`);
+      .then((result) => {
+        setSuccessMessage(`Welcome to Straper, ${result.user.displayName}`);
       })
       .catch((error) => {
         setErrorMessage(error.message);
@@ -60,16 +82,16 @@ const Login = () => {
         </div>
 
         {successMessage && (
-          <div className="text-primary mb-4 text-center text-md">
+          <div className="mb-4 text-center">
             <Spin className="mr-3" />
-            {successMessage}
+            <Typography.Text className="text-primary">{successMessage}</Typography.Text>
           </div>
         )}
 
         {errorMessage && (
           <div className="text-error mb-4 text-center text-sm">
             <WarningOutlined className="mr-2" />
-            {errorMessage}
+            <Typography.Text type="danger">{errorMessage}</Typography.Text>
           </div>
         )}
 

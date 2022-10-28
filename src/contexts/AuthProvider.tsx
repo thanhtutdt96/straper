@@ -42,9 +42,11 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
         });
 
         navigate('/');
-      } else {
-        navigate('/login');
+
+        return;
       }
+
+      navigate('/login');
     });
 
     return () => {

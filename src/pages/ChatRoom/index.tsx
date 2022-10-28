@@ -1,13 +1,18 @@
-import { useAuth } from 'contexts/AuthProvider';
-import { Button } from 'antd';
+import { Col, Row } from 'antd';
+import ChatWindow from 'components/ChatWindow';
+import Sidebar from 'components/Sidebar';
 
 const ChatRoom = () => {
-  const { logOut } = useAuth();
-
   return (
     <div>
-      <h2>Chat Room</h2>
-      <Button onClick={logOut}>Logout</Button>
+      <Row>
+        <Col span={8}>
+          <Sidebar />
+        </Col>
+        <Col span={16}>
+          <ChatWindow />
+        </Col>
+      </Row>
     </div>
   );
 };

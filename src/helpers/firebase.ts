@@ -1,7 +1,6 @@
 // Import the functions you need from the SDKs you need
-import { getAuth } from '@firebase/auth';
-import { getDatabase } from '@firebase/database';
-import { getAnalytics } from 'firebase/analytics';
+import { connectAuthEmulator, getAuth } from '@firebase/auth';
+import { connectFirestoreEmulator, getFirestore } from '@firebase/firestore';
 import { initializeApp } from 'firebase/app';
 
 // Your web app's Firebase configuration
@@ -18,9 +17,17 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
 
 const auth = getAuth(app);
-const database = getDatabase(app);
+const database = getFirestore(app);
 
-export { app, auth, database, analytics };
+if (import.meta.env.VITE_FIREBASE_USE_EMULATOR === 'true') {
+  connectAuthEmulator(auth, import.meta.env.VITE_FIREBASE_AUTH_EMULATOR_HOST);
+  connectFirestoreEmulator(
+    database,
+    import.meta.env.VITE_FIREBASE_FIRESTORE_EMULATOR_HOST,
+    import.meta.env.VITE_FIREBASE_FIRESTORE_EMULATOR_PORT,
+  );
+}
+
+export { app, auth, database };

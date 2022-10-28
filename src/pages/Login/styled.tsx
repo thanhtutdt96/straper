@@ -39,6 +39,7 @@ export const FormWrapper = styled.div`
 
 export const styledInput = css`
   border-radius: 1rem;
+  font-size: 1rem;
 `;
 
 export const FormInput = styled(Input)`
