@@ -15,13 +15,15 @@ const UserInfoWrapper = styled.div`
 `;
 
 const UserInfo = () => {
-  const { logOut } = useAuth();
+  const { logOut, user } = useAuth();
 
   return (
     <UserInfoWrapper>
       <div>
-        <Avatar>A</Avatar>
-        <Typography.Text className="username">ABC</Typography.Text>
+        <Avatar src={user?.photoURL}>
+          {user?.photoURL ? '' : user?.displayName && user?.displayName?.charAt(0).toUpperCase()}
+        </Avatar>
+        <Typography.Text className="username">{user?.displayName}</Typography.Text>
       </div>
       <Button onClick={logOut}>Logout</Button>
     </UserInfoWrapper>

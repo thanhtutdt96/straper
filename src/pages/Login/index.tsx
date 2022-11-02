@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { auth } from 'helpers/firebase';
-import { addDocument } from 'helpers/services';
+import { addDocument, generateKeywords } from 'helpers/services';
 import {
   FacebookFilled,
   GoogleOutlined,
@@ -13,6 +13,7 @@ import {
   getAdditionalUserInfo,
   GoogleAuthProvider,
   signInWithPopup,
+  UserCredential,
 } from '@firebase/auth';
 import { Button, Checkbox, Form, Spin, Typography } from 'antd';
 import logo from 'assets/logo.png';
@@ -29,26 +30,31 @@ const Login = () => {
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
+  const loginSuccessHandler = (result: UserCredential) => {
+    const user = result.user;
+
+    setSuccessMessage(`Welcome to Straper, ${user.displayName}`);
+
+    const additionalUserInfo = getAdditionalUserInfo(result);
+
+    const { displayName, email, photoURL, uid, providerId } = user;
+
+    if (additionalUserInfo?.isNewUser) {
+      void addDocument('users', {
+        displayName,
+        email,
+        photoURL,
+        uid,
+        providerId,
+        keywords: generateKeywords(displayName?.toLowerCase() || ''),
+      });
+    }
+  };
+
   const logInWithFacebook = () => {
     signInWithPopup(auth, new FacebookAuthProvider())
       .then((result) => {
-        const user = result.user;
-
-        setSuccessMessage(`Welcome to Straper, ${user.displayName}`);
-
-        const additionalUserInfo = getAdditionalUserInfo(result);
-
-        const { displayName, email, photoURL, uid, providerId } = user;
-
-        if (additionalUserInfo?.isNewUser) {
-          void addDocument('users', {
-            displayName,
-            email,
-            photoURL,
-            uid,
-            providerId,
-          });
-        }
+        loginSuccessHandler(result);
       })
       .catch((error) => {
         setErrorMessage(error.message);
@@ -58,7 +64,7 @@ const Login = () => {
   const loginWithGoogle = () => {
     signInWithPopup(auth, new GoogleAuthProvider())
       .then((result) => {
-        setSuccessMessage(`Welcome to Straper, ${result.user.displayName}`);
+        loginSuccessHandler(result);
       })
       .catch((error) => {
         setErrorMessage(error.message);

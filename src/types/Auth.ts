@@ -6,9 +6,8 @@ export type User = {
 };
 
 export type AuthContext = {
-  user?: User;
-  logIn?: (email: string, password: string) => void;
-  logOut?: () => void;
-  register?: (email: string, password: string) => void;
-  logInWithFacebook?: () => void;
+  user: User | null;
+  logIn: (email: string, password: string) => void;
+  logOut: () => void;
+  register: (email: string, password: string) => void;
 };

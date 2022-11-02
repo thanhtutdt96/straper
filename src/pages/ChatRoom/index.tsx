@@ -1,6 +1,6 @@
 import { Col, Row } from 'antd';
-import ChatWindow from 'components/ChatWindow';
-import Sidebar from 'components/Sidebar';
+import ChatWindow from 'components/ui/ChatWindow';
+import Sidebar from 'components/ui/Sidebar';
 
 const ChatRoom = () => {
   return (

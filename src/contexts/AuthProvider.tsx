@@ -9,10 +9,15 @@ import {
 } from '@firebase/auth';
 import { AuthContext, User } from 'types/Auth';
 
-const authContext = createContext<AuthContext>({});
+const authContext = createContext<AuthContext>({
+  user: null,
+  logIn: () => ({}),
+  logOut: () => ({}),
+  register: () => ({}),
+});
 
 export default function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User>();
+  const [user, setUser] = useState<User | null>(null);
   const navigate = useNavigate();
 
   const logIn = (email: string, password: string) => {
@@ -29,8 +34,6 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      console.log('auth user: ', currentUser);
-
       if (currentUser) {
         const { displayName, email, uid, photoURL } = currentUser;
 

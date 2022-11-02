@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
+import AppProvider from 'contexts/AppProvider';
 import AuthProvider from 'contexts/AuthProvider';
 import ReactDOM from 'react-dom/client';
 import App from 'App';
@@ -10,7 +11,9 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <AuthProvider>
-        <App />
+        <AppProvider>
+          <App />
+        </AppProvider>
       </AuthProvider>
     </BrowserRouter>
   </React.StrictMode>,

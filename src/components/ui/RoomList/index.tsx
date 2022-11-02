@@ -1,3 +1,4 @@
+import { useApp } from 'contexts/AppProvider';
 import { PlusSquareOutlined } from '@ant-design/icons';
 import { Button, Collapse, Typography } from 'antd';
 import styled from 'styled-components';
@@ -27,13 +28,21 @@ const ButtonStyled = styled(Button)`
 `;
 
 const RoomList = () => {
+  const { rooms, setIsAddRoomModalVisible, setSelectedRoomId } = useApp();
+
+  const handleAddRoom = () => {
+    setIsAddRoomModalVisible?.(true);
+  };
+
   return (
     <Collapse ghost defaultActiveKey={['1']}>
       <PanelStyled header="Room list" key="1">
-        <LinkStyled>Room 1</LinkStyled>
-        <LinkStyled>Room 2</LinkStyled>
-        <LinkStyled>Room 3</LinkStyled>
-        <ButtonStyled type="text" icon={<PlusSquareOutlined />}>
+        {rooms.map((room) => (
+          <LinkStyled key={room.id} onClick={() => setSelectedRoomId?.(room.id)}>
+            {room.name}
+          </LinkStyled>
+        ))}
+        <ButtonStyled type="text" icon={<PlusSquareOutlined />} onClick={handleAddRoom}>
           Add room
         </ButtonStyled>
       </PanelStyled>

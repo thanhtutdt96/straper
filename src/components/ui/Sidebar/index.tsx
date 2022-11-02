@@ -1,7 +1,7 @@
 import { Col, Row } from 'antd';
 import sidebarBackground from 'assets/sidebar-background.png';
-import RoomList from 'components/RoomList';
-import UserInfo from 'components/UserInfo';
+import RoomList from 'components/ui/RoomList';
+import UserInfo from 'components/ui/UserInfo';
 import styled from 'styled-components';
 
 const SidebarStyled = styled.div`
