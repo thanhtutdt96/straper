@@ -46,9 +46,9 @@ export default function useFirestore<DocumentType extends RecordType>(
       return;
     }
 
-    const collectionRef = collection(database, collectionName);
-
     let dataQuery: Query;
+
+    const collectionRef = collection(database, collectionName);
 
     if (condition) {
       if (!condition.compareValue || !condition.compareValue.length) {

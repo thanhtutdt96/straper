@@ -40,14 +40,18 @@ const Login = () => {
     const { displayName, email, photoURL, uid, providerId } = user;
 
     if (additionalUserInfo?.isNewUser) {
-      void addDocument('users', {
-        displayName,
-        email,
-        photoURL,
-        uid,
-        providerId,
-        keywords: generateKeywords(displayName?.toLowerCase() || ''),
-      });
+      try {
+        void addDocument('users', {
+          displayName,
+          email,
+          photoURL,
+          uid,
+          providerId,
+          keywords: generateKeywords(displayName?.toLowerCase() || ''),
+        });
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 

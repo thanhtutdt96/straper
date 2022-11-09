@@ -8,6 +8,20 @@ export type Room = {
   members: string[];
 };
 
+export type Timestamp = {
+  nanoseconds?: number;
+  seconds?: number;
+};
+
+export type MessageType = {
+  text: string;
+  uid: string;
+  photoURL?: string;
+  displayName: string;
+  roomId: string;
+  createdAt: Timestamp;
+};
+
 export type AppContext = {
   rooms: Room[];
   roomMembers: User[];

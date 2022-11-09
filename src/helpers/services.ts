@@ -1,15 +1,21 @@
 import { database } from 'helpers/firebase';
-import { addDoc, collection, serverTimestamp } from '@firebase/firestore';
+import { addDoc, collection, doc, serverTimestamp, updateDoc } from '@firebase/firestore';
 
-export const addDocument = async (collectionName: string, data: Record<string, unknown>) => {
-  try {
-    await addDoc(collection(database, collectionName), {
-      ...data,
-      createdAt: serverTimestamp(),
-    });
-  } catch (error) {
-    console.error('Error adding document: ', error);
-  }
+export const addDocument = (collectionName: string, data: Record<string, unknown>) => {
+  return addDoc(collection(database, collectionName), {
+    ...data,
+    createdAt: serverTimestamp(),
+  });
+};
+
+export const updateDocument = (
+  documentId: string,
+  collectionName: string,
+  data: Partial<unknown>,
+) => {
+  const documentRef = doc(database, collectionName, documentId);
+
+  return updateDoc(documentRef, data);
 };
 
 // generate keywords for displayName, using for full text search

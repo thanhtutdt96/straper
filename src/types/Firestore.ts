@@ -3,6 +3,7 @@ import { WhereFilterOp } from '@firebase/firestore';
 export enum CollectionName {
   USERS = 'users',
   ROOMS = 'rooms',
+  MESSSAGES = 'messages',
 }
 
 export type CollectionCondition = {

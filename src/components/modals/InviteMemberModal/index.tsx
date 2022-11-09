@@ -1,7 +1,6 @@
 import { FC, useMemo, useState } from 'react';
 import { useApp } from 'contexts/AppProvider';
-import { useAuth } from 'contexts/AuthProvider';
-import { addDocument } from 'helpers/services';
+import { updateDocument } from 'helpers/services';
 import { Avatar, Form, Modal, Select, Spin } from 'antd';
 import useFirestore from 'hooks/useFirestore';
 import { debounce } from 'lodash-es';
@@ -68,8 +67,12 @@ const DebounceSelect: FC<Props> = ({
 };
 
 const InviteMemberModal = () => {
-  const { selectedRoom, isInviteMemberModalVisible, setIsInviteMemberModalVisible } = useApp();
-  const { user } = useAuth();
+  const {
+    selectedRoom,
+    selectedRoomId,
+    isInviteMemberModalVisible,
+    setIsInviteMemberModalVisible,
+  } = useApp();
   const [value, setValue] = useState<UserListItem[]>([]);
   const [form] = Form.useForm();
 
@@ -101,8 +104,16 @@ const InviteMemberModal = () => {
   };
 
   const okHandler = async () => {
-    await addDocument(CollectionName.ROOMS, { ...form.getFieldsValue(), members: [user?.uid] });
     form.resetFields();
+
+    try {
+      await updateDocument(selectedRoomId, CollectionName.ROOMS, {
+        members: [...(selectedRoom?.members || []), ...value.map((item) => item.value)],
+      });
+    } catch (error) {
+      console.log(error);
+    }
+
     setIsInviteMemberModalVisible?.(false);
   };
 

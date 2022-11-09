@@ -1,8 +1,14 @@
+import { ChangeEvent, useMemo, useState } from 'react';
 import { useApp } from 'contexts/AppProvider';
+import { useAuth } from 'contexts/AuthProvider';
+import { addDocument } from 'helpers/services';
 import { UserAddOutlined } from '@ant-design/icons';
 import { Alert, Avatar, Button, Form, Input, Tooltip } from 'antd';
 import Message from 'components/ui/Message';
+import useFirestore from 'hooks/useFirestore';
 import styled from 'styled-components';
+import { MessageType } from 'types/App';
+import { CollectionCondition, CollectionName, QueryCollectionMode } from 'types/Firestore';
 
 const HeaderStyled = styled.div`
   display: flex;
@@ -34,9 +40,48 @@ const MessageListStyled = styled.div`
 
 const ChatWindow = () => {
   const { roomMembers, selectedRoom, setIsInviteMemberModalVisible } = useApp();
+  const { user } = useAuth();
+
+  const [inputValue, setInputValue] = useState('');
+  const [form] = Form.useForm();
+
+  const messageCondition = useMemo<CollectionCondition>(
+    () => ({
+      fieldName: 'roomId',
+      operator: '==',
+      compareValue: selectedRoom?.id || '',
+    }),
+    [selectedRoom?.id],
+  );
+
+  const { documents: messages } = useFirestore<MessageType>(
+    CollectionName.MESSSAGES,
+    messageCondition,
+    QueryCollectionMode.GET_REAL_TIME,
+  );
 
   const handleInviteMember = () => {
     setIsInviteMemberModalVisible?.(true);
+  };
+
+  const handleOnSubmit = async () => {
+    try {
+      await addDocument(CollectionName.MESSSAGES, {
+        text: inputValue,
+        uid: user?.uid,
+        photoURL: user?.photoURL,
+        displayName: user?.displayName,
+        roomId: selectedRoom?.id,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+
+    form.resetFields(['message']);
+  };
+
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setInputValue(event.target.value);
   };
 
   return (
@@ -67,14 +112,28 @@ const ChatWindow = () => {
           </HeaderStyled>
           <ContentStyled className="d-flex flex-column justify-end">
             <MessageListStyled>
-              <Message content="sdfsdfs" displayName="tu" photoURL={null} createdAt={'234234'} />
-              <Message content="sdfsdfs" displayName="tu" photoURL={null} createdAt={'234234'} />
-              <Message content="sdfsdfs" displayName="tu" photoURL={null} createdAt={'234234'} />
+              {messages.map((message, index) => (
+                <Message
+                  key={index}
+                  content={message.text}
+                  displayName={message.displayName}
+                  photoURL={message.photoURL}
+                  createdAt={message.createdAt}
+                />
+              ))}
             </MessageListStyled>
-            <Form>
-              <Form.Item>
-                <Input autoComplete="off" placeholder="Type something..."></Input>
-                <Button type="primary">Send</Button>
+            <Form form={form}>
+              <Form.Item name="message">
+                <Input
+                  autoComplete="off"
+                  placeholder="Type something..."
+                  bordered={false}
+                  onPressEnter={handleOnSubmit}
+                  onChange={handleInputChange}
+                ></Input>
+                <Button type="primary" onClick={handleOnSubmit}>
+                  Send
+                </Button>
               </Form.Item>
             </Form>
           </ContentStyled>
