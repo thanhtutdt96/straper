@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useContext, useMemo, useState } from 'react';
+import { createContext, ReactNode, useCallback, useContext, useMemo, useState } from 'react';
 import { useAuth } from 'contexts/AuthProvider';
 import useFirestore from 'hooks/useFirestore';
 import { AppContext, Room } from 'types/App';
@@ -12,6 +12,7 @@ const appContext = createContext<AppContext>({
   selectedRoom: undefined,
   isAddRoomModalVisible: false,
   isInviteMemberModalVisible: false,
+  clearAppDependencies: () => ({}),
 });
 
 export default function AppProvider({ children }: { children: ReactNode }) {
@@ -45,6 +46,10 @@ export default function AppProvider({ children }: { children: ReactNode }) {
 
   const { documents: roomMembers } = useFirestore<User>(CollectionName.USERS, roomUsersConditions);
 
+  const clearAppDependencies = useCallback(() => {
+    setSelectedRoomId('');
+  }, []);
+
   return (
     <appContext.Provider
       value={{
@@ -57,6 +62,7 @@ export default function AppProvider({ children }: { children: ReactNode }) {
         setSelectedRoomId,
         setIsAddRoomModalVisible,
         setIsInviteMemberModalVisible,
+        clearAppDependencies,
       }}
     >
       {children}

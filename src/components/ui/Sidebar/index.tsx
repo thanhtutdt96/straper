@@ -1,23 +1,36 @@
 import { Col, Row } from 'antd';
-import sidebarBackground from 'assets/sidebar-background.png';
 import RoomList from 'components/ui/RoomList';
+import StraperLogo from 'components/ui/StraperLogo';
 import UserInfo from 'components/ui/UserInfo';
 import styled from 'styled-components';
 
 const SidebarStyled = styled.div`
-  background-color: #051e34;
-  background-image: url(${sidebarBackground});
-  background-position: left 0 bottom 0;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  color: #fff;
-  height: 100vh;
-  background-size: 400px 556px;
+  background-color: var(--color-sidebar);
+  height: 100%;
+  border-top-left-radius: 1rem;
+  border-bottom-left-radius: 1rem;
+`;
+
+const LogoWrapper = styled.div`
+  padding: 1rem 1.25rem;
+  background-color: var(--color-primary);
+  height: 5.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top-left-radius: 1rem;
+
+  .straper-logo {
+    transform: translateX(-10px);
+  }
 `;
 
 const Sidebar = () => {
   return (
     <SidebarStyled>
+      <LogoWrapper>
+        <StraperLogo titleAttributes={{ color: '#fff', fontSize: '1.25rem', fontWeight: 700 }} />
+      </LogoWrapper>
       <Row>
         <Col span={24}>
           <UserInfo />

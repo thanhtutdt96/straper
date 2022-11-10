@@ -1,5 +1,7 @@
+import { useApp } from 'contexts/AppProvider';
 import { useAuth } from 'contexts/AuthProvider';
-import { Avatar, Button, Typography } from 'antd';
+import { Avatar, Typography } from 'antd';
+import { AccentButton } from 'components/ui/Common/styled';
 import styled from 'styled-components';
 
 const UserInfoWrapper = styled.div`
@@ -7,6 +9,7 @@ const UserInfoWrapper = styled.div`
   justify-content: space-between;
   padding: 1rem 1.25rem;
   border-bottom: 1px solid rgba(82, 38, 83);
+  background-color: var(--color-secondary);
 
   .username {
     color: #fff;
@@ -16,6 +19,12 @@ const UserInfoWrapper = styled.div`
 
 const UserInfo = () => {
   const { logOut, user } = useAuth();
+  const { clearAppDependencies } = useApp();
+
+  const onLogoutHandler = () => {
+    clearAppDependencies();
+    logOut();
+  };
 
   return (
     <UserInfoWrapper>
@@ -23,9 +32,13 @@ const UserInfo = () => {
         <Avatar src={user?.photoURL}>
           {user?.photoURL ? '' : user?.displayName && user?.displayName?.charAt(0).toUpperCase()}
         </Avatar>
-        <Typography.Text className="username">{user?.displayName}</Typography.Text>
+        <Typography.Text strong className="username">
+          {user?.displayName}
+        </Typography.Text>
       </div>
-      <Button onClick={logOut}>Logout</Button>
+      <AccentButton type="primary" onClick={onLogoutHandler} danger>
+        Logout
+      </AccentButton>
     </UserInfoWrapper>
   );
 };

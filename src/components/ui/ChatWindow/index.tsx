@@ -1,9 +1,10 @@
-import { ChangeEvent, useMemo, useState } from 'react';
+import { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { useApp } from 'contexts/AppProvider';
 import { useAuth } from 'contexts/AuthProvider';
 import { addDocument } from 'helpers/services';
-import { UserAddOutlined } from '@ant-design/icons';
+import { SendOutlined, UserAddOutlined } from '@ant-design/icons';
 import { Alert, Avatar, Button, Form, Input, Tooltip } from 'antd';
+import { AccentButton } from 'components/ui/Common/styled';
 import Message from 'components/ui/Message';
 import useFirestore from 'hooks/useFirestore';
 import styled from 'styled-components';
@@ -13,29 +14,71 @@ import { CollectionCondition, CollectionName, QueryCollectionMode } from 'types/
 const HeaderStyled = styled.div`
   display: flex;
   justify-content: space-between;
-  height: 56px;
-  padding: 0 16px;
+  height: 5.5rem;
+  padding: 0 1.25rem;
   align-items: center;
-  border-bottom: 1px solid rgb(230, 230, 230);
+  background-color: #fff;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+  border-top-right-radius: 1rem;
 
   .chat-window__header-info {
     display: flex;
     flex-direction: column;
     justify-content: center;
+
+    p {
+      font-weight: 700;
+      font-size: var(--text-lg);
+      margin-bottom: 0.25rem;
+    }
+
+    span {
+      font-size: var(--text-sm);
+      opacity: 0.7;
+    }
+  }
+
+  .chat-window__invite-group {
+    display: flex;
+    align-items: center;
+  }
+
+  .ant-btn {
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+    margin-right: 0.5rem;
   }
 `;
 
 const WrapperStyled = styled.div`
-  height: 100vh;
+  height: 100%;
 `;
 
 const ContentStyled = styled.div`
-  height: calc(100% - 56px);
-  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  height: calc(100% - 5.5rem);
 `;
+
 const MessageListStyled = styled.div`
   max-height: 100%;
-  overflow-y: scroll;
+  overflow-y: auto;
+  padding: 1.25rem;
+`;
+
+const FormStyled = styled(Form)`
+  background-color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0.5rem;
+  border-bottom-right-radius: 1rem;
+
+  .ant-form-item {
+    flex: 1;
+    margin-bottom: 0;
+  }
 `;
 
 const ChatWindow = () => {
@@ -44,6 +87,8 @@ const ChatWindow = () => {
 
   const [inputValue, setInputValue] = useState('');
   const [form] = Form.useForm();
+
+  const endMessageListRef = useRef<HTMLDivElement>(null);
 
   const messageCondition = useMemo<CollectionCondition>(
     () => ({
@@ -60,11 +105,19 @@ const ChatWindow = () => {
     QueryCollectionMode.GET_REAL_TIME,
   );
 
+  useEffect(() => {
+    endMessageListRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
   const handleInviteMember = () => {
     setIsInviteMemberModalVisible?.(true);
   };
 
   const handleOnSubmit = async () => {
+    if (!inputValue || inputValue?.trim()?.length === 0) {
+      return;
+    }
+
     try {
       await addDocument(CollectionName.MESSSAGES, {
         text: inputValue,
@@ -80,7 +133,7 @@ const ChatWindow = () => {
     form.resetFields(['message']);
   };
 
-  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setInputValue(event.target.value);
   };
 
@@ -90,13 +143,19 @@ const ChatWindow = () => {
         <>
           <HeaderStyled>
             <div className="chat-window__header-info">
-              <p className="text-lg ma-0">{selectedRoom?.name}</p>
-              <span className="text-sm">{selectedRoom?.description}</span>
+              <p>{selectedRoom?.name}</p>
+              <span>{selectedRoom?.description}</span>
             </div>
-            <div className="d-flex align-center">
-              <Button icon={<UserAddOutlined />} type="text" onClick={handleInviteMember}>
-                Invite
-              </Button>
+            <div className="chat-window__invite-group">
+              <Button
+                icon={<UserAddOutlined />}
+                type="primary"
+                shape="circle"
+                ghost
+                size="small"
+                danger
+                onClick={handleInviteMember}
+              />
               <Avatar.Group size="small" maxCount={2}>
                 {roomMembers.map((member) => (
                   <Tooltip title={member.displayName} key={member.uid}>
@@ -110,7 +169,7 @@ const ChatWindow = () => {
               </Avatar.Group>
             </div>
           </HeaderStyled>
-          <ContentStyled className="d-flex flex-column justify-end">
+          <ContentStyled>
             <MessageListStyled>
               {messages.map((message, index) => (
                 <Message
@@ -119,27 +178,30 @@ const ChatWindow = () => {
                   displayName={message.displayName}
                   photoURL={message.photoURL}
                   createdAt={message.createdAt}
+                  userUuid={message.uid}
                 />
               ))}
+              <div ref={endMessageListRef} />
             </MessageListStyled>
-            <Form form={form}>
+            <FormStyled form={form}>
               <Form.Item name="message">
-                <Input
+                <Input.TextArea
                   autoComplete="off"
                   placeholder="Type something..."
                   bordered={false}
                   onPressEnter={handleOnSubmit}
                   onChange={handleInputChange}
-                ></Input>
-                <Button type="primary" onClick={handleOnSubmit}>
-                  Send
-                </Button>
+                  rows={1}
+                  size="large"
+                  autoSize
+                ></Input.TextArea>
               </Form.Item>
-            </Form>
+              <AccentButton type="primary" onClick={handleOnSubmit} icon={<SendOutlined />} />
+            </FormStyled>
           </ContentStyled>
         </>
       ) : (
-        <Alert message="Choose a room to chat" type="info" showIcon style={{ margin: '5px' }} />
+        <Alert message="Choose a room to chat" type="info" showIcon style={{ margin: '15px' }} />
       )}
     </WrapperStyled>
   );

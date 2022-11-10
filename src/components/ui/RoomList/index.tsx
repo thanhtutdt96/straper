@@ -7,7 +7,8 @@ const PanelStyled = styled(Collapse.Panel)`
   &&& {
     .ant-collapse-header,
     p {
-      color: #fff;
+      color: var(--color-text-sidebar);
+      font-weight: 600;
     }
 
     .ant-collapse-content-box {
@@ -19,12 +20,11 @@ const PanelStyled = styled(Collapse.Panel)`
 const LinkStyled = styled(Typography.Link)`
   display: block;
   margin-bottom: 0.3rem;
-  color: #fff;
 `;
 
 const ButtonStyled = styled(Button)`
-  color: #fff;
   padding: 0;
+  color: var(--color-text-sidebar);
 `;
 
 const RoomList = () => {

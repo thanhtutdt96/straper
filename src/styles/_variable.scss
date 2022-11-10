@@ -1,8 +1,27 @@
-$primary: #1890ff;
-$secondary: #0c365a;
-$accent: #2772b2;
+$primary: #4a6fa5;
+$secondary: #4a9ca5;
+$tertiary: #dbe9ee;
+$accent: #f56d91;
 
 $positive: #20d167;
 $negative: #f50057;
 $info: #23cefd;
 $warning: #f5bd00;
+
+$sidebar: #34455f;
+$text-grey: #9ca3af;
+$border: rgba(0, 0, 0, 0.2);
+
+:root {
+  --color-primary: #{$primary};
+  --color-secondary: #{$secondary};
+  --color-tertiary: #{$tertiary};
+  --color-accent: #{$accent};
+  --color-positive: #{$positive};
+  --color-negative: #{$negative};
+  --color-info: #{$info};
+  --color-warning: #{$warning};
+  --color-sidebar: #{$sidebar};
+  --color-text-sidebar: #{$text-grey};
+  --color-border: #{$border};
+}

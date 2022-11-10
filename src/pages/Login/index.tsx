@@ -16,14 +16,15 @@ import {
   UserCredential,
 } from '@firebase/auth';
 import { Button, Checkbox, Form, Spin, Typography } from 'antd';
-import logo from 'assets/logo.png';
+import { MainWrapperStyled } from 'components/ui/Common/styled';
+import StraperLogo from 'components/ui/StraperLogo';
 import {
   FormInput,
   FormInputPassword,
   FormSubmitCta,
   FormWrapper,
-  LoginBackground,
   LoginSeparator,
+  LogoWrapper,
 } from 'pages/Login/styled';
 
 const Login = () => {
@@ -84,12 +85,11 @@ const Login = () => {
   };
 
   return (
-    <LoginBackground>
+    <MainWrapperStyled>
       <FormWrapper>
-        <div className="mb-7 text-center d-flex align-center justify-center login__header">
-          <img src={logo} alt="Straper" width="32px" className="mr-2" />
-          <h2>Login</h2>
-        </div>
+        <LogoWrapper>
+          <StraperLogo title="Login" titleAttributes={{ color: '#1890ff' }} />
+        </LogoWrapper>
 
         {successMessage && (
           <div className="mb-4 text-center">
@@ -163,7 +163,7 @@ const Login = () => {
           </div>
         </Form>
       </FormWrapper>
-    </LoginBackground>
+    </MainWrapperStyled>
   );
 };
 

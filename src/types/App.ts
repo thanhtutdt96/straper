@@ -32,4 +32,5 @@ export type AppContext = {
   setSelectedRoomId?: Dispatch<SetStateAction<string>>;
   isAddRoomModalVisible: boolean;
   isInviteMemberModalVisible: boolean;
+  clearAppDependencies: () => void;
 };
