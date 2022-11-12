@@ -24,6 +24,7 @@ const AddRoomModal = () => {
       open={isAddRoomModalVisible}
       onOk={okHandler}
       onCancel={cancelHandler}
+      centered
     >
       <Form form={form} layout="vertical">
         <Form.Item label="Room name" name="name">

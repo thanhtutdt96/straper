@@ -64,19 +64,25 @@ export default function useFirestore<DocumentType extends RecordType>(
       dataQuery = query(collectionRef, orderBy('createdAt'));
     }
 
-    const unsubscribe = onSnapshot(dataQuery, (querySnapshot) => {
-      const documents = querySnapshot.docs.map(
-        (document) =>
-          <DocumentType>{
-            ...document.data(),
-            id: document.id,
-          },
-      );
+    const unsubscribe = onSnapshot(
+      dataQuery,
+      (querySnapshot) => {
+        const documents = querySnapshot.docs.map(
+          (document) =>
+            <DocumentType>{
+              ...document.data(),
+              id: document.id,
+            },
+        );
 
-      setDocuments(documents);
-    });
+        setDocuments(documents);
+      },
+      (error) => {
+        console.log(error);
+      },
+    );
 
-    return () => unsubscribe();
+    return unsubscribe;
   }, [collectionName, condition, queryCollectionMode]);
 
   return {

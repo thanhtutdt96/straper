@@ -127,6 +127,7 @@ const InviteMemberModal = () => {
       open={isInviteMemberModalVisible}
       onOk={okHandler}
       onCancel={cancelHandler}
+      centered
     >
       <Form form={form} layout="vertical">
         <Form.Item label="Select or search members" name="select-member">

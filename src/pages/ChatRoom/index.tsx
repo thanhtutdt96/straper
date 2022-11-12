@@ -1,3 +1,6 @@
+import { useEffect } from 'react';
+import { useParams } from 'react-router';
+import { useApp } from 'contexts/AppProvider';
 import { Col, Row } from 'antd';
 import ChatWindow from 'components/ui/ChatWindow';
 import { MainWrapperStyled } from 'components/ui/Common/styled';
@@ -28,6 +31,15 @@ const RowStyled = styled(Row)`
 `;
 
 const ChatRoom = () => {
+  const { roomId } = useParams();
+  const { setSelectedRoomId } = useApp();
+
+  useEffect(() => {
+    if (roomId) {
+      setSelectedRoomId?.(roomId);
+    }
+  }, [roomId, setSelectedRoomId]);
+
   return (
     <MainWrapperStyled>
       <WrapperStyled>
@@ -43,4 +55,5 @@ const ChatRoom = () => {
     </MainWrapperStyled>
   );
 };
+
 export default ChatRoom;

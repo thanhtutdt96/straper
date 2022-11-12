@@ -73,6 +73,12 @@ module.exports = {
           pattern: "assets/**",
           group: "external",
         },
+        // Routes
+        {
+          pattern: "router/**",
+          group: "external",
+          position: "before"
+        },
         // Contexts
         {
           pattern: "contexts/**",

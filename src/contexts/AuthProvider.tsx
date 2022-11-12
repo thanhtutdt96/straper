@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import { auth } from 'helpers/firebase';
 import {
   createUserWithEmailAndPassword,
@@ -19,6 +19,7 @@ const authContext = createContext<AuthContext>({
 export default function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const logIn = (email: string, password: string) => {
     return signInWithEmailAndPassword(auth, email, password);
@@ -44,7 +45,9 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
           photoURL,
         });
 
-        navigate('/');
+        if (location.pathname === '/login') {
+          navigate('/');
+        }
 
         return;
       }
@@ -55,7 +58,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
     return () => {
       unsubscribe();
     };
-  }, [navigate]);
+  }, [location.pathname, navigate]);
 
   return (
     <authContext.Provider value={{ user, logIn, logOut, register }}>
