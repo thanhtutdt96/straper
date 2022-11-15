@@ -12,8 +12,8 @@ const ColStyled = styled(Col)`
   max-height: 100vh;
 `;
 
-const ColSidebarStyled = styled(ColStyled)`
-  background-color: var(--color-tertiary);
+const ColMessageStyled = styled(ColStyled)`
+  background-color: #fff;
   border-top-right-radius: 1rem;
   border-bottom-right-radius: 1rem;
 `;
@@ -47,9 +47,9 @@ const ChatRoom = () => {
           <ColStyled span={8}>
             <Sidebar />
           </ColStyled>
-          <ColSidebarStyled span={16}>
+          <ColMessageStyled span={16}>
             <ChatWindow />
-          </ColSidebarStyled>
+          </ColMessageStyled>
         </RowStyled>
       </WrapperStyled>
     </MainWrapperStyled>

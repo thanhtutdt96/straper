@@ -13,7 +13,7 @@ const SidebarStyled = styled.div`
 
 const LogoWrapper = styled.div`
   padding: 1rem 1.25rem;
-  background-color: var(--color-primary);
+  background: linear-gradient(to bottom right, rgba(74, 111, 165, 1) 0%, rgb(119, 184, 230) 100%);
   height: 5.5rem;
   display: flex;
   align-items: center;

@@ -17,14 +17,15 @@ const HeaderStyled = styled.div`
   height: 5.5rem;
   padding: 0 1.25rem;
   align-items: center;
-  background-color: #fff;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
   border-top-right-radius: 1rem;
+  background: linear-gradient(to bottom right, rgb(111 117 123) 0%, rgb(164 170 178) 100%);
 
   .chat-window__header-info {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    color: #fff;
 
     p {
       font-weight: 700;
@@ -68,16 +69,18 @@ const MessageListStyled = styled.div`
 `;
 
 const FormStyled = styled(Form)`
-  background-color: #fff;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 0.5rem;
-  border-bottom-right-radius: 1rem;
+  padding: 0.25rem 0.75rem;
+  background-color: #f0f0f0;
+  border-radius: 1rem;
+  margin: 1rem;
 
   .ant-form-item {
     flex: 1;
     margin-bottom: 0;
+    margin-right: 0.5rem;
   }
 `;
 
@@ -198,7 +201,12 @@ const ChatWindow = () => {
                   autoSize
                 ></Input.TextArea>
               </Form.Item>
-              <AccentButton type="primary" onClick={handleOnSubmit} icon={<SendOutlined />} />
+              <AccentButton
+                type="primary"
+                borderRadius="1rem"
+                onClick={handleOnSubmit}
+                icon={<SendOutlined />}
+              />
             </FormStyled>
           </ContentStyled>
         </>

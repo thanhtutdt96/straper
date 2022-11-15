@@ -1,27 +1,32 @@
 # Project - *Straper*
 
-**Elegant Music App** is a modern music web app using the [Shazam Core API](https://rapidapi.com/tipsters/api/shazam-core).
+**Straper** is a modern messaging app provides fast, stable, convenient for users anytime, anywhere.
 
-Built with Vite, React, TailwindCSS, TypeScript, Eslint, Prettier.
+Built with Firebase, Vite, React, Antd, TypeScript, Eslint.
+
+## Prerequisite
+- [Firebase CLI](https://firebase.google.com/docs/cli)
+- Java JDK (for running Firebase CLI)
 
 ## Running on Local
 - Change the `.env.example` to `.env`
+- Start the `Firebase Emulators` by 
+```npm
+cd emulators
+firebase emulators:start
+```
 - Start Vite dev server by running `yarn dev`
 
 ## Main Features
 
 The following functionalities are implemented:
 
-- [x] List out latest songs & artists based on top charts and current user location.
-- [x] List out songs filtered by genres, and related songs according to artist.
-- [x] Play, pause, adjust volume and perform other controls for any song have been listed.
-- [x] View song or artist details by click on a card.
-- [x] Search for any song.
-- [x] Loading state while waiting for the API.
-- [x] Responsive on multiple screen resolutions.
+- [x] Login with Google/Facebook
+- [x] Create rooms for group chatting, invite friends to room
+- [x] Individual chatting
 
 ## Release
-[Elegant Music App](https://elegant-music-app.netlify.app/)
+[Straper](https://straper.netlify.app/)
 
 
 ## License

@@ -54,7 +54,7 @@ const AvatarWrapper = styled.div`
 `;
 
 const MessageBubble = styled.div<{ isOwnMessage: boolean }>`
-  background-color: ${(props) => (props.isOwnMessage ? 'var(--color-secondary)' : '#fff')};
+  background-color: ${(props) => (props.isOwnMessage ? 'var(--color-secondary)' : '#f0f0f0')};
   color: ${(props) => (props.isOwnMessage ? '#fff' : '#000')};
   max-width: max-content;
   padding: 0.5rem 0.8rem;

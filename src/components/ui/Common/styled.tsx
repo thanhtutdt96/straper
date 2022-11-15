@@ -2,14 +2,14 @@ import { Button, Modal } from 'antd';
 import loginBackground from 'assets/login-background.jpg';
 import styled from 'styled-components';
 
-export const AccentButton = styled(Button)`
+export const AccentButton = styled(Button)<{ borderRadius: string }>`
   &&& {
     background-color: var(--color-accent);
     border-color: var(--color-accent);
   }
   color: #fff;
   font-weight: 600;
-  border-radius: 0.5rem;
+  border-radius: ${(props) => props.borderRadius || '0.5rem'};
 
   &:hover {
     opacity: 0.9;
