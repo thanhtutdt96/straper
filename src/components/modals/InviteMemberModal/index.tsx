@@ -1,7 +1,8 @@
 import { FC, useMemo, useState } from 'react';
 import { useApp } from 'contexts/AppProvider';
 import { updateDocument } from 'helpers/services';
-import { Avatar, Form, Modal, Select, Spin } from 'antd';
+import { Avatar, Form, Select, Spin } from 'antd';
+import Modal from 'components/ui/Modal';
 import useFirestore from 'hooks/useFirestore';
 import { debounce } from 'lodash-es';
 import { User } from 'types/Auth';
@@ -75,6 +76,7 @@ const InviteMemberModal = () => {
   } = useApp();
   const [value, setValue] = useState<UserListItem[]>([]);
   const [form] = Form.useForm();
+  const [isOkButtonDisabled, setIsOkButtonDisabled] = useState(true);
 
   const userConditions: CollectionCondition = {
     fieldName: 'keywords',
@@ -104,33 +106,54 @@ const InviteMemberModal = () => {
   };
 
   const okHandler = async () => {
-    form.resetFields();
+    void form
+      .validateFields()
+      .then(async ({ errorFields }) => {
+        if (errorFields?.length > 0) {
+          return;
+        }
 
-    try {
-      await updateDocument(selectedRoomId, CollectionName.ROOMS, {
-        members: [...(selectedRoom?.members || []), ...value.map((item) => item.value)],
-      });
-    } catch (error) {
-      console.log(error);
-    }
+        form.resetFields();
 
-    setIsInviteMemberModalVisible?.(false);
+        await updateDocument(selectedRoomId, CollectionName.ROOMS, {
+          members: [...(selectedRoom?.members || []), ...value.map((item) => item.value)],
+        });
+
+        setIsInviteMemberModalVisible?.(false);
+      })
+      .catch((err) => console.log(err));
   };
 
   const cancelHandler = () => {
+    form.resetFields();
     setIsInviteMemberModalVisible?.(false);
+  };
+
+  const formChanges = () => {
+    setIsOkButtonDisabled(form.getFieldsError().some((field) => field.errors.length > 0));
   };
 
   return (
     <Modal
-      title="Invite new member"
+      title="Invite new member(s)"
       open={isInviteMemberModalVisible}
       onOk={okHandler}
       onCancel={cancelHandler}
-      centered
+      okButtonProps={{
+        disabled: isOkButtonDisabled,
+      }}
     >
-      <Form form={form} layout="vertical">
-        <Form.Item label="Select or search members" name="select-member">
+      <Form form={form} layout="vertical" onFieldsChange={() => formChanges()}>
+        <Form.Item
+          label="Select or search members"
+          name="select-member"
+          rules={[
+            {
+              required: true,
+              message: 'Select at least 1 member',
+            },
+          ]}
+        >
           <DebounceSelect
             mode="multiple"
             placeholder="Search to select"

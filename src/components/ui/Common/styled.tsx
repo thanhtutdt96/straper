@@ -1,4 +1,4 @@
-import { Button } from 'antd';
+import { Button, Modal } from 'antd';
 import loginBackground from 'assets/login-background.jpg';
 import styled from 'styled-components';
 
@@ -32,4 +32,33 @@ export const MainWrapperStyled = styled.div`
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
+`;
+
+export const ModalStyled = styled(Modal)`
+  .ant-modal-header {
+    background-color: var(--color-accent);
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+
+    .ant-modal-title {
+      color: #fff;
+    }
+  }
+
+  .ant-modal-close {
+    color: #fff;
+  }
+  .ant-modal-content {
+    border-radius: 0.5rem;
+  }
+
+  .ant-btn {
+    border-radius: 0.5rem;
+  }
+
+  .ant-btn-primary:not([disabled]) {
+    background-color: var(--color-accent);
+    border-color: var(--color-accent);
+    border-radius: 0.5rem;
+  }
 `;

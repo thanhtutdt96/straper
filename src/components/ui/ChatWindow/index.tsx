@@ -118,9 +118,13 @@ const ChatWindow = () => {
       return;
     }
 
+    const sendValue = inputValue;
+    setInputValue('');
+    form.resetFields(['message']);
+
     try {
       await addDocument(CollectionName.MESSSAGES, {
-        text: inputValue,
+        text: sendValue,
         uid: user?.uid,
         photoURL: user?.photoURL,
         displayName: user?.displayName,
@@ -129,8 +133,6 @@ const ChatWindow = () => {
     } catch (error) {
       console.log(error);
     }
-
-    form.resetFields(['message']);
   };
 
   const handleInputChange = (event: ChangeEvent<HTMLTextAreaElement>) => {

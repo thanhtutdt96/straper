@@ -57,9 +57,9 @@ const MessageBubble = styled.div<{ isOwnMessage: boolean }>`
   background-color: ${(props) => (props.isOwnMessage ? 'var(--color-secondary)' : '#fff')};
   color: ${(props) => (props.isOwnMessage ? '#fff' : '#000')};
   max-width: max-content;
-  padding: 0.8rem;
+  padding: 0.5rem 0.8rem;
   border-radius: ${(props) =>
-    props.isOwnMessage ? '0.8rem 0 0.8rem 0.8rem' : '0 0.8rem 0.8rem 0.8rem'};
+    props.isOwnMessage ? '0.8rem 0.25rem 0.8rem 0.8rem' : '0.25rem 0.8rem 0.8rem 0.8rem'};
   align-self: ${(props) => (props.isOwnMessage ? 'end' : 'start')};
 `;
 
